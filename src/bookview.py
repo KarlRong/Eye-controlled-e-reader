@@ -61,10 +61,10 @@ class BookView(QSplitter):
         elif num >= len(self.book.chapters):
             num = 0
         self.web_view.setHtml(self.book.get_chapter(num).decode(encoding="utf-8"))
+        # Get information of scroll bar, set zoom factor
         self.webFrame = self.web_view.page().mainFrame()
         scrollMax = self.webFrame.scrollBarMaximum(2)
         print('srollBarMaximum: ' + str(scrollMax))
-        self.webFrame.setScrollBarValue(2, 800)
         self.webFrame.setZoomFactor(2)
         print('zoom factor: ' + str(self.webFrame.zoomFactor()))
 

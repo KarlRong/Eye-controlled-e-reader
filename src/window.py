@@ -12,6 +12,7 @@ from PyQt4.QtGui import (QMainWindow, QDockWidget, QAction, QApplication,
 from src.library import LibraryTableWidget, insert_library
 from src.bookview import BookView
 from src.books import Book
+from src.GazeThread import GazeThread
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
@@ -23,6 +24,8 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
+
+        self.gazeThread = GazeThread()
 
         self.create_layout()
         self.create_actions()
@@ -75,6 +78,8 @@ class MainWindow(QMainWindow):
                      SLOT("closeAllWindows"))
         self.connect(self.about_action, SIGNAL("triggered()"), self.about)
         self.connect(self.help_action, SIGNAL("triggered()"), self.help)
+        self.gazeThread.signal_timeStamp.connect(self.receive_gaze)
+        self.gazeThread.start()
 
     def about(self):
         QMessageBox.about(self, "QtBooks", "An ebook reader")
@@ -98,5 +103,10 @@ class MainWindow(QMainWindow):
         book = Book(book_id)
         insert_library(book)
         self.library.refresh()
+
+    def receive_gaze(self, text, bScroll):
+        print("receive: " + str(bScroll))
+        currentValue = self.book.webFrame.scrollBarValue(2)
+        self.book.webFrame.setScrollBarValue(2, currentValue + 800)
 
 

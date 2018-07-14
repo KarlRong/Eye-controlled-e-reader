@@ -4,6 +4,7 @@
 
 import sys
 
+from PyQt4 import QtCore
 from PyQt4.QtGui import QApplication
 from src.window import MainWindow
 
