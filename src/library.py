@@ -69,4 +69,3 @@ class LibraryTableWidget(QTableWidget):
     def view_book(self):
         book_id = self.library['books'][self.currentRow()]['id']
         self.book_view.load_book(book_id)
-

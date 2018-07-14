@@ -8,6 +8,7 @@ from PyQt4.QtCore import SIGNAL
 
 from src.books import Book
 
+
 class BookView(QSplitter):
     def __init__(self, parent=None):
         super(BookView, self).__init__(parent=parent)
@@ -39,13 +40,13 @@ class BookView(QSplitter):
     def create_connections(self):
         chlist = self.chapter_list
         self.connect(self.next_button, SIGNAL("clicked()"), lambda:
-                     chlist.setCurrentRow(0
-                         if chlist.currentRow() == chlist.count() - 1
-                         else chlist.currentRow() + 1))
+        chlist.setCurrentRow(0
+                             if chlist.currentRow() == chlist.count() - 1
+                             else chlist.currentRow() + 1))
         self.connect(self.previous_button, SIGNAL("clicked()"), lambda:
-                     chlist.setCurrentRow(chlist.count() - 1
-                                          if chlist.currentRow() == 0
-                                          else chlist.currentRow() - 1))
+        chlist.setCurrentRow(chlist.count() - 1
+                             if chlist.currentRow() == 0
+                             else chlist.currentRow() - 1))
         self.connect(self.chapter_list, SIGNAL("currentRowChanged(int)"),
                      self.set_chapter)
 
@@ -66,10 +67,10 @@ class BookView(QSplitter):
         self.webFrame.setScrollBarValue(2, 800)
         self.webFrame.setZoomFactor(2)
         print('zoom factor: ' + str(self.webFrame.zoomFactor()))
+
     def load_book(self, book_id):
         self.book = Book(book_id)
         self.chapter_list.clear()
         for chapter in self.book.chapters:
             self.chapter_list.addItem(chapter[0])
         self.chapter_list.setCurrentRow(0)
-

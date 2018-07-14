@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 
 import os
 import zipfile
@@ -8,7 +8,7 @@ import sys
 from lxml import etree
 from bs4 import BeautifulSoup
 
-##from bs4.BeautifulSoup import BeautifulStoneSoup
+# from bs4.BeautifulSoup import BeautifulStoneSoup
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
 
@@ -53,22 +53,23 @@ class Book(object):
 
         self.f = zipfile.ZipFile(self._FILE % self.book_id, 'r')
         print(self._FILE)
-        soup = BeautifulSoup(self.f.read('META-INF/container.xml'),'lxml')
+        soup = BeautifulSoup(self.f.read('META-INF/container.xml'), 'lxml')
         oebps = soup.findAll('rootfile')[0]['full-path']
-        folder = oebps.rfind('/')                             
-        self.oebps_folder = '' if folder == -1 else oebps[:folder+1]   # 找到oebps的文件夹名称
+        folder = oebps.rfind('/')
+        self.oebps_folder = '' if folder == -1 else oebps[:folder + 1]  # 找到oebps的文件夹名称
         oebps_content = self.f.read(oebps)
         self.read_doc_props(oebps_content)
-        opf_bs = BeautifulSoup(oebps_content,'lxml')
+        opf_bs = BeautifulSoup(oebps_content, 'lxml')
         ncx = opf_bs.findAll('item', {'id': 'ncx'})[0]
-        ncx = self.oebps_folder + ncx['href']     # 找到ncx的完整路径
-        ncx_bs = BeautifulSoup(self.f.read(ncx),"lxml")
+        ncx = self.oebps_folder + ncx['href']  # 找到ncx的完整路径
+        ncx_bs = BeautifulSoup(self.f.read(ncx), "lxml")
 
         self.chapters = [(nav.navlabel.text, nav.content['src']) for
                          nav in ncx_bs.findAll('navmap')[0].findAll('navpoint')]
 
     def get_chapter(self, num):
-        return self.f.read(self.oebps_folder+self.chapters[num][1])
+        return self.f.read(self.oebps_folder + self.chapters[num][1])
+
 
 if __name__ == '__main__':
     book = Book('莎士比亚全集')
@@ -77,9 +78,4 @@ if __name__ == '__main__':
     print(book.title)
     print(book.author)
 
-    print(str(book.chapters).encode("utf-8"))
-
-
-
-
-
+    print(str(book.chapters).decode("unicode-escape").encode("utf-8"))
