@@ -107,6 +107,9 @@ class MainWindow(QMainWindow):
     def receive_gaze(self, text, bScroll):
         print("receive: " + str(bScroll))
         currentValue = self.book.webFrame.scrollBarValue(2)
-        self.book.webFrame.setScrollBarValue(2, currentValue + 800)
+        if bScroll:
+            self.book.webFrame.setScrollBarValue(2, currentValue + 850)
+        else:
+            self.book.webFrame.setScrollBarValue(2, currentValue - 850)
 
 

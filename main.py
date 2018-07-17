@@ -7,12 +7,15 @@ import sys
 from PyQt4 import QtCore
 from PyQt4.QtGui import QApplication
 from src.window import MainWindow
+from src.calibrate import calibrate
 
 reload(sys)
 
 
 def main():
     print "Start "
+
+    calibrate()
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

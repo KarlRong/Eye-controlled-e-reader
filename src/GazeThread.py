@@ -42,7 +42,18 @@ class GazeThread(QtCore.QThread):
 
             print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_angle_y: " + str(gaze_angle_y))
 
-            if headUpDown < -20 and timestamp - self.lastScrollTime > 1.5:
+            # if headUpDown < -20 and timestamp - self.lastScrollTime > 1.5:
+            #     self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
+            #     self.lastScrollTime = timestamp
+            # elif headUpDown > 5 and timestamp - self.lastScrollTime > 1.5:
+            #     self.signal_timeStamp.emit("GazeTimestamp:", False)  # 发送信号
+            #     self.lastScrollTime = timestamp
+
+            if gaze_angle_y > 1 and timestamp - self.lastScrollTime > 1.5:
                 self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
                 self.lastScrollTime = timestamp
+            elif gaze_angle_y < -5 and timestamp - self.lastScrollTime > 1.5:
+                self.signal_timeStamp.emit("GazeTimestamp:", False)  # 发送信号
+                self.lastScrollTime = timestamp
+
             time.sleep(0.01)
