@@ -193,7 +193,7 @@ def calibrate():
 
     # Keep update
     i = 0
-    while i < 400:
+    while i < 4000:
         ball.draw()
         # 快速刷新屏幕
         tk.update_idletasks()
