@@ -5,8 +5,10 @@ import os
 import sys
 import shutil
 
-from PyQt4.QtCore import Qt, SIGNAL, SLOT
-from PyQt4.QtGui import (QMainWindow, QDockWidget, QAction, QApplication,
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal as SIGNAL
+from PyQt5.QtCore import pyqtSlot as SLOT
+from PyQt5.QtWidgets import (QMainWindow, QDockWidget, QAction, QApplication,
                          QMessageBox, QFileDialog)
 
 from src.library import LibraryTableWidget, insert_library
@@ -72,10 +74,9 @@ class MainWindow(QMainWindow):
 
 
     def create_connections(self):
-        self.connect(self.library_action, SIGNAL("triggered()"), self.create_library_dock)
-        self.connect(self.open_action, SIGNAL("triggered()"), self.open_book)
-        self.connect(self.quit_action, SIGNAL("triggered()"), QApplication.instance(),
-                     SLOT("closeAllWindows"))
+        self.library_action.triggered.connect(self.create_library_dock)
+        self.open_action.triggered.connect(self.open_book)
+        self.quit_action.triggered.connect(self.close())
         self.connect(self.about_action, SIGNAL("triggered()"), self.about)
         self.connect(self.help_action, SIGNAL("triggered()"), self.help)
         self.gazeThread.signal_timeStamp.connect(self.receive_gaze)
