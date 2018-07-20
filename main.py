@@ -4,21 +4,22 @@
 
 import sys
 
-from PyQt4.QtGui import QApplication
+import matplotlib.pyplot as plt
+from PyQt4 import Qt
 from src.window import MainWindow
-from calibrate import calibrate
+from importlib import reload
 
 reload(sys)
 
 
 def main():
-    print "Start "
+    print("Start ")
 
-    app = QApplication(sys.argv)
+    app = Qt.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     qt_return_code = app.exec_()
-    print 'Qt return code:' + str(qt_return_code)
+    print('Qt return code:' + str(qt_return_code))
     sys.exit(qt_return_code)
 
 

@@ -2,13 +2,13 @@
 
 # !/usr/bin/env python
 
-from Tkinter import *
+from tkinter import *
 import random
 import time
 from time import gmtime, strftime
 import zmq
 import json
-import Queue
+import queue
 import threading
 import pandas as pd
 import numpy as np
@@ -35,7 +35,7 @@ class Ball:
         # 获取X轴坐标
         self.canvas_width = self.canvas.winfo_width()
 
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.gazeSubscriber = GazeSubscriber(self.queue)
 
     def draw(self):

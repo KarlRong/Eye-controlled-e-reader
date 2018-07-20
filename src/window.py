@@ -5,7 +5,7 @@ import os
 import sys
 import shutil
 
-from PyQt4.QtCore import Qt, SIGNAL, SLOT
+from PyQt4 import QtCore
 from PyQt4.QtGui import (QMainWindow, QDockWidget, QAction, QApplication,
                          QMessageBox, QFileDialog)
 
@@ -45,10 +45,10 @@ class MainWindow(QMainWindow):
             return
 
         self.dock = QDockWidget("Library", self)
-        self.dock.setAllowedAreas(Qt.LeftDockWidgetArea|Qt.RightDockWidgetArea)
+        self.dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
         self.library = LibraryTableWidget(self.book)
         self.dock.setWidget(self.library)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.dock)
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
 
     def create_menus(self):
         file_menu = self.menuBar().addMenu("&File")
@@ -72,12 +72,12 @@ class MainWindow(QMainWindow):
 
 
     def create_connections(self):
-        self.connect(self.library_action, SIGNAL("triggered()"), self.create_library_dock)
-        self.connect(self.open_action, SIGNAL("triggered()"), self.open_book)
-        self.connect(self.quit_action, SIGNAL("triggered()"), QApplication.instance(),
-                     SLOT("closeAllWindows"))
-        self.connect(self.about_action, SIGNAL("triggered()"), self.about)
-        self.connect(self.help_action, SIGNAL("triggered()"), self.help)
+        self.connect(self.library_action, QtCore.SIGNAL("triggered()"), self.create_library_dock)
+        self.connect(self.open_action, QtCore.SIGNAL("triggered()"), self.open_book)
+        self.connect(self.quit_action, QtCore.SIGNAL("triggered()"), QApplication.instance(),
+                     QtCore.SLOT("closeAllWindows"))
+        self.connect(self.about_action, QtCore.SIGNAL("triggered()"), self.about)
+        self.connect(self.help_action, QtCore.SIGNAL("triggered()"), self.help)
         self.gazeThread.signal_timeStamp.connect(self.receive_gaze)
         self.gazeThread.start()
 
