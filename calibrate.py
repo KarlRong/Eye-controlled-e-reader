@@ -12,6 +12,7 @@ import Queue
 import threading
 import pandas as pd
 import numpy as np
+import math
 # from datetime import datetime, timedelta, timezone
 
 
@@ -51,17 +52,17 @@ class Ball:
         print("Pos: " + str(pos))
         # 如果最上面的纵轴坐标在顶上，则往下移动一个像素
         if pos[1] <= 0:
-            self.y = 1
+            self.y = 2
         # 如果最下面的纵轴坐标在底上，则向上移动
         if pos[3] > self.canvas_height:
-            self.y = -1
+            self.y = -2
         # 宽度控制#
         # 如果在左边框了，那么向右边移动3像素
         if pos[0] <= 0:
-            self.x = 3
+            self.x = 5
         # 如果到右边框了，左移动3像素
         if pos[2] > self.canvas_width:
-            self.x = -3
+            self.x = -5
 
 
 class GazeSubscriber:
@@ -77,10 +78,16 @@ class GazeSubscriber:
 
         self.lastScrollTime = 0
 
-        self.myColumns = ['TimeStamp', 'BallPosX', 'BallPosY', 'GazeAngleX', 'GazeAngleY', 'HeadPosX', 'HeadPosY',
-                          'HeadPosZ', 'HeadAngleX', 'HeadAngleY', 'HeadAngleZ']
+        self.myColumns = ['TimeStamp', 'ScreenPart', 'BallPosX', 'BallPosY',
+                          'GazeAngleX', 'GazeAngleY',
+                          'EyeBall0X', 'EyeBall0Y', 'EyeBall0Z',
+                          'EyeBall1X', 'EyeBall1Y', 'EyeBall1Z',
+                          'Pupil0X', 'Pupil0Y', 'Pupil0Z',
+                          'Pupil1X', 'Pupil1Y', 'Pupil1Z',
+                          'HeadPosX', 'HeadPosY', 'HeadPosZ',
+                          'HeadAngleX', 'HeadAngleY', 'HeadAngleZ']
         self.df = pd.DataFrame(columns=self.myColumns)
-        self.entry = dict(zip(self.myColumns, [np.nan] * 11))
+        self.entry = dict(zip(self.myColumns, [np.nan] * 24))
         self.dataPath = 'calibrateData\\'
         self.dataName = 'EyeReader' + strftime("%Y-%m-%d-%H-%M", gmtime()) + '.csv'
         self.running = True
@@ -95,7 +102,9 @@ class GazeSubscriber:
     def stop(self):
         self.running = False
         print(self.dataName)
-        self.df.to_csv(self.dataPath + self.dataName)
+        print(self.df.shape[0])
+        if self.df.shape[0] > 1:
+            self.df.to_csv(self.dataPath + self.dataName)
 
     def threadSubscribe(self):
         while self.running:
@@ -112,12 +121,29 @@ class GazeSubscriber:
             gaze = data['gaze']
             gaze_angle_x = gaze['gaze_angle_x'] * 180 / 3.1415926
             gaze_angle_y = gaze['gaze_angle_y'] * 180 / 3.1415926
+            eye_ball_0_x = gaze['eye_ball_0_x']
+            eye_ball_0_y = gaze['eye_ball_0_y']
+            eye_ball_0_z = gaze['eye_ball_0_z']
+            eye_ball_1_x = gaze['eye_ball_1_x']
+            eye_ball_1_y = gaze['eye_ball_1_y']
+            eye_ball_1_z = gaze['eye_ball_1_z']
+            pupil_0_x = gaze['pupil_0_x']
+            pupil_0_y = gaze['pupil_0_y']
+            pupil_0_z = gaze['pupil_0_z']
+            pupil_1_x = gaze['pupil_1_x']
+            pupil_1_y = gaze['pupil_1_y']
+            pupil_1_z = gaze['pupil_1_z']
 
             print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_angle_y: " + str(gaze_angle_y))
             print("BallPos: " + str(self.ballPos))
             self.entry['TimeStamp'] = time.time()#(datetime.now(timezone.utc) + timedelta(days=3)).timestamp()
+            screenWidth = 1920
+            screenHeight = 1080
             self.entry['BallPosX'] = self.ballPos[0]
+            part_x = math.ceil(self.ballPos[0] / (screenWidth / 6))
             self.entry['BallPosY'] = self.ballPos[1]
+            part_y = math.ceil(self.ballPos[1] / (screenHeight / 6))
+            self.entry['ScreenPart'] = (part_y - 1) * 6 + part_x
             self.entry['GazeAngleX'] = gaze_angle_x
             self.entry['GazeAngleY'] = gaze_angle_y
             self.entry['HeadPosX'] = HeadPosX
@@ -126,6 +152,18 @@ class GazeSubscriber:
             self.entry['HeadAngleX'] = HeadPosRx
             self.entry['HeadAngleY'] = HeadPosRy
             self.entry['HeadAngleZ'] = HeadPosRz
+            self.entry['EyeBall0X'] = eye_ball_0_x
+            self.entry['EyeBall0Y'] = eye_ball_0_y
+            self.entry['EyeBall0Z'] = eye_ball_0_z
+            self.entry['EyeBall1X'] = eye_ball_1_x
+            self.entry['EyeBall1Y'] = eye_ball_1_y
+            self.entry['EyeBall1Z'] = eye_ball_1_z
+            self.entry['Pupil0X'] = pupil_0_x
+            self.entry['Pupil0Y'] = pupil_0_y
+            self.entry['Pupil0Z'] = pupil_0_z
+            self.entry['Pupil1X'] = pupil_1_x
+            self.entry['Pupil1Y'] = pupil_1_y
+            self.entry['Pupil1Z'] = pupil_1_z
             # print(self.entry)
             self.df = self.df.append(self.entry, ignore_index=True)
             # print(self.df)
@@ -155,7 +193,7 @@ def calibrate():
 
     # Keep update
     i = 0
-    while i < 100:
+    while i < 400:
         ball.draw()
         # 快速刷新屏幕
         tk.update_idletasks()
