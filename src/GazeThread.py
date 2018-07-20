@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextBrowser
+from PyQt4 import QtCore
+from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtGui import QWidget, QPushButton, QApplication, QTextBrowser
 
 import time
 import json

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import (QWidget, QPushButton, QHBoxLayout, QVBoxLayout,
+from PyQt4.QtGui import (QWidget, QPushButton, QHBoxLayout, QVBoxLayout,
                          QListWidget, QLabel, QSplitter)
-from PyQt5.QtCore import pyqtSignal as SIGNAL
-from PyQt5.QtCore import Qt
-from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
+from PyQt4.QtWebKit import QWebView, QWebPage
+from PyQt4.QtCore import SIGNAL
+
 from src.books import Book
 
 
@@ -16,7 +16,7 @@ class BookView(QSplitter):
         self.create_connections()
 
     def create_layout(self):
-        self.web_view = QWebEngineView()
+        self.web_view = QWebView()
         self.chapter_list = QListWidget()
         self.next_button = QPushButton("Next chapter")
         self.previous_button = QPushButton("Previous chapter")
@@ -39,18 +39,19 @@ class BookView(QSplitter):
 
     def create_connections(self):
         chlist = self.chapter_list
-        self.next_button.clicked.connect(lambda:
+        self.connect(self.next_button, SIGNAL("clicked()"), lambda:
         chlist.setCurrentRow(0
                              if chlist.currentRow() == chlist.count() - 1
                              else chlist.currentRow() + 1))
-        self.previous_button.clicked.connect(lambda:
+        self.connect(self.previous_button, SIGNAL("clicked()"), lambda:
         chlist.setCurrentRow(chlist.count() - 1
                              if chlist.currentRow() == 0
                              else chlist.currentRow() - 1))
-        self.chapter_list.currentRowChanged.connect(self.set_chapter)
+        self.connect(self.chapter_list, SIGNAL("currentRowChanged(int)"),
+                     self.set_chapter)
 
         page = self.web_view.page()
-        # page.setLinkDelegationPolicy(QWebEnginePage.DelegateAllLinks)
+        page.setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
 
     def set_chapter(self, num=None):
         if num is None:

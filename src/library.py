@@ -4,10 +4,8 @@ import json
 import os
 import sys
 
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import pyqtSlot as SLOT
-
+from PyQt4.QtGui import QTableWidget, QTableWidgetItem
+from PyQt4.QtCore import Qt, SIGNAL
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
@@ -66,7 +64,7 @@ class LibraryTableWidget(QTableWidget):
         self.resizeColumnsToContents()
 
     def create_connections(self):
-        self.doubleClicked.connect(self.view_book)
+        self.connect(self, SIGNAL("itemDoubleClicked(QTableWidgetItem *)"), self.view_book)
 
     def view_book(self):
         book_id = self.library['books'][self.currentRow()]['id']
