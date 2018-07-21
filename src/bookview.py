@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyQt4.QtGui import (QWidget, QPushButton, QHBoxLayout, QVBoxLayout,
-                         QListWidget, QLabel, QSplitter)
-from PyQt4.QtWebKit import QWebView, QWebPage
-from PyQt4.QtCore import SIGNAL
-
+from PyQt5.QtWidgets import (QWidget, QPushButton, QHBoxLayout, QVBoxLayout,
+                        
+                         QListWidget, QLabel,
+                         QSplitter)
+from PyQt5.QtWidgets import *
+from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
+from PyQt5 import QtCore
 from src.books import Book
+
+
 
 
 class BookView(QSplitter):
@@ -16,7 +20,7 @@ class BookView(QSplitter):
         self.create_connections()
 
     def create_layout(self):
-        self.web_view = QWebView()
+        self.web_view = QWebEngineView()
         self.chapter_list = QListWidget()
         self.next_button = QPushButton("Next chapter")
         self.previous_button = QPushButton("Previous chapter")
@@ -33,25 +37,24 @@ class BookView(QSplitter):
 
         widget = QWidget()
         widget.setLayout(vbox)
+        self.web_view.setUrl(QtCore.QUrl("http://"))
+        self.webPage = self.web_view.page()
 
         self.addWidget(self.web_view)
         self.addWidget(widget)
 
     def create_connections(self):
         chlist = self.chapter_list
-        self.connect(self.next_button, SIGNAL("clicked()"), lambda:
+        self.next_button.clicked.connect(lambda:
         chlist.setCurrentRow(0
                              if chlist.currentRow() == chlist.count() - 1
                              else chlist.currentRow() + 1))
-        self.connect(self.previous_button, SIGNAL("clicked()"), lambda:
+        self.previous_button.clicked.connect(lambda:
         chlist.setCurrentRow(chlist.count() - 1
                              if chlist.currentRow() == 0
                              else chlist.currentRow() - 1))
-        self.connect(self.chapter_list, SIGNAL("currentRowChanged(int)"),
-                     self.set_chapter)
+        self.chapter_list.currentRowChanged[int].connect(self.set_chapter)
 
-        page = self.web_view.page()
-        page.setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
 
     def set_chapter(self, num=None):
         if num is None:
@@ -61,12 +64,8 @@ class BookView(QSplitter):
         elif num >= len(self.book.chapters):
             num = 0
         self.web_view.setHtml(self.book.get_chapter(num).decode(encoding="utf-8"))
-        # Get information of scroll bar, set zoom factor
-        self.webFrame = self.web_view.page().mainFrame()
-        scrollMax = self.webFrame.scrollBarMaximum(2)
-        print('srollBarMaximum: ' + str(scrollMax))
-        self.webFrame.setZoomFactor(2)
-        print('zoom factor: ' + str(self.webFrame.zoomFactor()))
+        self.webPage = self.web_view.page()
+        self.webPage.setZoomFactor(2)
 
     def load_book(self, book_id):
         self.book = Book(book_id)

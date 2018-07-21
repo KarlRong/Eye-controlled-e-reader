@@ -4,9 +4,13 @@
 
 import sys
 
+from PyQt5.QtWidgets import *
+
 import matplotlib.pyplot as plt
-from PyQt4 import Qt
+
+from PyQt5.QtWidgets import QApplication
 from src.window import MainWindow
+
 from importlib import reload
 
 reload(sys)
@@ -15,7 +19,7 @@ reload(sys)
 def main():
     print("Start ")
 
-    app = Qt.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     qt_return_code = app.exec_()

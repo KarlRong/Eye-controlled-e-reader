@@ -2,16 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+from PyQt5.QtWidgets import *
 import sys
+
 import shutil
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import (QMainWindow, QDockWidget, QAction, QApplication,
-                         QMessageBox, QFileDialog)
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import (QMainWindow, QDockWidget, QAction, QApplication,
+
+                             QMessageBox, QFileDialog)
 
 from src.library import LibraryTableWidget, insert_library
+
 from src.bookview import BookView
+
 from src.books import Book
+
 from src.GazeThread import GazeThread
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,7 +52,7 @@ class MainWindow(QMainWindow):
             return
 
         self.dock = QDockWidget("Library", self)
-        self.dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
+        self.dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
         self.library = LibraryTableWidget(self.book)
         self.dock.setWidget(self.library)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dock)
@@ -70,32 +77,29 @@ class MainWindow(QMainWindow):
         self.help_action = QAction("Help", self)
         self.about_action = QAction("&About", self)
 
-
     def create_connections(self):
-        self.connect(self.library_action, QtCore.SIGNAL("triggered()"), self.create_library_dock)
-        self.connect(self.open_action, QtCore.SIGNAL("triggered()"), self.open_book)
-        self.connect(self.quit_action, QtCore.SIGNAL("triggered()"), QApplication.instance(),
-                     QtCore.SLOT("closeAllWindows"))
-        self.connect(self.about_action, QtCore.SIGNAL("triggered()"), self.about)
-        self.connect(self.help_action, QtCore.SIGNAL("triggered()"), self.help)
+        self.library_action.triggered.connect(self.create_library_dock)
+        self.open_action.triggered.connect(self.open_book)
+        self.quit_action.triggered.connect(QApplication.instance().closeAllWindows)
+        self.about_action.triggered.connect(self.about)
+        self.help_action.triggered.connect(self.help)
         self.gazeThread.signal_timeStamp.connect(self.receive_gaze)
         self.gazeThread.start()
 
     def about(self):
         QMessageBox.about(self, "QtBooks", "An ebook reader")
 
-
     def help(self):
         QMessageBox.information(self, 'Help', 'Nothing yet!')
 
     def open_book(self):
-        book_path = QFileDialog.getOpenFileName(self, u'打开Epub格式电子书', ".", "(*.epub)")
+        book_path = QFileDialog.getOpenFileName(self, u'打开Epub格式电子书', ".", "(*.epub)")[0]
 
         print(u"in open_book, book_name is:" + str(book_path))
         print(u"in open_book, bookdata path:" + str(LIBRARY_DIR))
         print(os.path.dirname(str(book_path)))
 
-        if os.path.dirname(str(book_path))+os.sep != str(LIBRARY_DIR):
+        if os.path.dirname(str(book_path)) + os.sep != str(LIBRARY_DIR):
             shutil.copy(str(book_path), LIBRARY_DIR)
 
         file_name = os.path.basename(str(book_path))
@@ -106,10 +110,7 @@ class MainWindow(QMainWindow):
 
     def receive_gaze(self, text, bScroll):
         print("receive: " + str(bScroll))
-        currentValue = self.book.webFrame.scrollBarValue(2)
         if bScroll:
-            self.book.webFrame.setScrollBarValue(2, currentValue + 850)
+            self.book.webPage.runJavaScript(str("window.scrollBy({0}, {1});".format('0', '425')))
         else:
-            self.book.webFrame.setScrollBarValue(2, currentValue - 850)
-
-
+            self.book.webPage.runJavaScript(str("window.scrollTo({0}, {1});".format('0', '-425')))

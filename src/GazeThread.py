@@ -1,13 +1,24 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from PyQt4 import QtCore
-from PyQt4.QtCore import QCoreApplication
-from PyQt4.QtGui import QWidget, QPushButton, QApplication, QTextBrowser
+
+from PyQt5.QtWidgets import *
+
+from PyQt5 import QtCore
+from PyQt5.QtCore import QCoreApplication
+
+
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextBrowser
 
 import time
+
+
 import json
+
+
 import zmq
+
+
 
 
 class GazeThread(QtCore.QThread):
@@ -72,5 +83,8 @@ class GazeThread(QtCore.QThread):
             #     self.lastScrollTime = timestamp
             if gaze_point_y > 122 and timestamp - self.lastScrollTime > 1.5:
                 self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
+                self.lastScrollTime = timestamp
+            elif gaze_point_y < 0 and timestamp - self.lastScrollTime > 1.5:
+                self.signal_timeStamp.emit("GazeTimestamp:", False)  # 发送信号
                 self.lastScrollTime = timestamp
             time.sleep(0.01)

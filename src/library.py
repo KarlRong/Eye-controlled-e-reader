@@ -1,16 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
+
+
+from PyQt5.QtWidgets import *
 import os
+
+
 import sys
 
-from PyQt4.QtGui import QTableWidget, QTableWidgetItem
-from PyQt4.QtCore import Qt, SIGNAL
+
+
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtCore import Qt
+
+
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
 
 from constants import LIBRARY
+
+
 
 
 def get_library():
@@ -64,7 +75,7 @@ class LibraryTableWidget(QTableWidget):
         self.resizeColumnsToContents()
 
     def create_connections(self):
-        self.connect(self, SIGNAL("itemDoubleClicked(QTableWidgetItem *)"), self.view_book)
+        self.itemDoubleClicked[QTableWidgetItem].connect(self.view_book)
 
     def view_book(self):
         book_id = self.library['books'][self.currentRow()]['id']
