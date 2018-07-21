@@ -6,8 +6,6 @@ import sys
 
 from PyQt5.QtWidgets import *
 
-import matplotlib.pyplot as plt
-
 from PyQt5.QtWidgets import QApplication
 from src.window import MainWindow
 

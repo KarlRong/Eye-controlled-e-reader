@@ -173,7 +173,7 @@ class GazeSubscriber:
             if self.queue.qsize() > 0:
                 try:
                     self.ballPos = self.queue.get(0)
-                except Queue.Empty:
+                except queue.Empty:
                     pass
             time.sleep(0.001)
 
