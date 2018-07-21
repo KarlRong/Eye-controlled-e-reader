@@ -2,26 +2,18 @@
 # -*- coding: utf-8 -*-
 import json
 
-
 from PyQt5.QtWidgets import *
 import os
 
-
 import sys
-
-
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
-
-
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
 
 from constants import LIBRARY
-
-
 
 
 def get_library():

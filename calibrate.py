@@ -13,7 +13,6 @@ import threading
 import pandas as pd
 import numpy as np
 import math
-# from datetime import datetime, timedelta, timezone
 
 
 class Ball:
@@ -89,7 +88,7 @@ class GazeSubscriber:
         self.df = pd.DataFrame(columns=self.myColumns)
         self.entry = dict(zip(self.myColumns, [np.nan] * 24))
         self.dataPath = 'calibrateData\\'
-        self.dataName = 'EyeReader' + strftime("%Y-%m-%d-%H-%M", gmtime()) + '.csv'
+        self.dataName = 'OpenFace' + strftime("%Y-%m-%d-%H-%M", gmtime()) + '.csv'
         self.running = True
 
         self.thread1 = threading.Thread(target=self.threadSubscribe)
@@ -136,7 +135,7 @@ class GazeSubscriber:
 
             print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_angle_y: " + str(gaze_angle_y))
             print("BallPos: " + str(self.ballPos))
-            self.entry['TimeStamp'] = time.time()#(datetime.now(timezone.utc) + timedelta(days=3)).timestamp()
+            self.entry['TimeStamp'] = time.time()  # (datetime.now(timezone.utc) + timedelta(days=3)).timestamp()
             screenWidth = 1920
             screenHeight = 1080
             self.entry['BallPosX'] = self.ballPos[0]

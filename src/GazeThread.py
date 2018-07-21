@@ -1,24 +1,10 @@
-# -*- coding: utf-8 -*-
-import sys
-
-
-from PyQt5.QtWidgets import *
-
 from PyQt5 import QtCore
-from PyQt5.QtCore import QCoreApplication
-
-
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextBrowser
 
 import time
 
-
 import json
 
-
 import zmq
-
-
 
 
 class GazeThread(QtCore.QThread):
@@ -47,7 +33,7 @@ class GazeThread(QtCore.QThread):
             frame = data['frame']
             confidence = data['confidence']
             headPose = data['pose']
-            headUpDown = headPose['pose_Rx'] * 180/3.1415926
+            headUpDown = headPose['pose_Rx'] * 180 / 3.1415926
             gaze = data['gaze']
             gaze_angle_y = gaze['gaze_angle_y'] * 180 / 3.1415926
             gaze_point_x = gaze['gaze_screen_x']
