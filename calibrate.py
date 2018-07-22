@@ -23,7 +23,7 @@ class Ball:
         # 来回反弹
         # --self.x = 0
         # --self.y = -1
-        starts = [-3, -2, -1, 1, 2, 3]
+        starts = [-5, -2, -1, 1, 2, 3]
         random.shuffle(starts)
         self.x = starts[0]
         self.y = -3
@@ -33,7 +33,7 @@ class Ball:
         self.canvas_height = self.canvas.winfo_height()
         # 获取X轴坐标
         self.canvas_width = self.canvas.winfo_width()
-
+        print('canvas: ' + str(self.canvas_width) + ' ' + str(self.canvas_height))
         self.queue = queue.Queue()
         self.gazeSubscriber = GazeSubscriber(self.queue)
 
@@ -194,9 +194,11 @@ def calibrate():
     i = 0
     while i < 4000:
         ball.draw()
-        # 快速刷新屏幕
-        tk.update_idletasks()
-        tk.update()
+        if i % 100 == 0:
+            # ball.draw()
+            # 快速刷新屏幕
+            tk.update_idletasks()
+            tk.update()
 
         time.sleep(0.01)
         i = i + 1

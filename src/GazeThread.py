@@ -51,8 +51,12 @@ class GazeThread(QtCore.QThread):
             pupil_1_y = gaze['pupil_1_y']
             pupil_1_z = gaze['pupil_1_z']
 
-            print("GazeThread " + "timestamp: " + str(timestamp) + " eye_ball_0: " + str(eye_ball_0_x)
-                  + " " + str(eye_ball_0_y) + " " + str(eye_ball_0_z))
+            print("GazeThread " + "timestamp: " + str(timestamp) + " eye_ball_0: " + str(eye_ball_1_x - pupil_1_x)
+                  + " " + str(eye_ball_1_y - pupil_1_y) + " " + str(eye_ball_1_z - pupil_1_z))
+            # print("GazeThread " + "timestamp: " + str(timestamp) + " pupil_0_x: " + str(pupil_0_x)
+            #       + " " + str(pupil_0_y) + " " + str(pupil_0_z))
+            print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_point_x: " + str(gaze_point_x)
+                  + " " + str(gaze_point_y))
 
             # if headUpDown < -20 and timestamp - self.lastScrollTime > 1.5:
             #     self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
