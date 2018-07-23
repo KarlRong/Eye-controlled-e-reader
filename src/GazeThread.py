@@ -27,7 +27,7 @@ class GazeThread(QtCore.QThread):
 
         self.lastScrollTime = 0
         print("Starting matlab engine...")
-        self.gpr = GPR()
+        # self.gpr = GPR()
         print("Collecting head pose updates...")
 
     def run(self):
@@ -66,13 +66,13 @@ class GazeThread(QtCore.QThread):
             #       + " " + str(eye_ball_1_y - pupil_1_y) + " " + str(eye_ball_1_z - pupil_1_z))
             # print("GazeThread " + "timestamp: " + str(timestamp) + " pupil_0_x: " + str(pupil_0_x)
             #       + " " + str(pupil_0_y) + " " + str(pupil_0_z))
-            print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_point_x: " + str(gaze_point_x)
+            print("GazeThread " + "timestamp: " + str(timestamp) + " gaze_point: " + str(gaze_point_x)
                   + " " + str(gaze_point_y))
-            data = [eye_ball_0_x, eye_ball_0_y, eye_ball_0_z, eye_ball_1_x, eye_ball_1_y, eye_ball_1_z,
-                    pupil_0_x, pupil_0_y, pupil_0_z, pupil_1_x, pupil_1_y, pupil_1_z,
-                    HeadPosX, HeadPosY, HeadPosZ, HeadPosRx, HeadPosRy, HeadPosRz]
-            pos = self.gpr.predictGPR(data)
-            print(pos)
+            # data = [eye_ball_0_x, eye_ball_0_y, eye_ball_0_z, eye_ball_1_x, eye_ball_1_y, eye_ball_1_z,
+            #         pupil_0_x, pupil_0_y, pupil_0_z, pupil_1_x, pupil_1_y, pupil_1_z,
+            #         HeadPosX, HeadPosY, HeadPosZ, HeadPosRx, HeadPosRy, HeadPosRz]
+            # pos = self.gpr.predictGPR(data)
+            # print(pos)
             # if headUpDown < -20 and timestamp - self.lastScrollTime > 1.5:
             #     self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
             #     self.lastScrollTime = timestamp
@@ -86,7 +86,7 @@ class GazeThread(QtCore.QThread):
             # elif gaze_angle_y < -5 and timestamp - self.lastScrollTime > 1.5:
             #     self.signal_timeStamp.emit("GazeTimestamp:", False)  # 发送信号
             #     self.lastScrollTime = timestamp
-            if pos[1] > 600 and timestamp - self.lastScrollTime > 1.5:
+            if gaze_point_y > 100 and timestamp - self.lastScrollTime > 1.5:
                 self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号
                 self.lastScrollTime = timestamp
             # elif gaze_point_y < 0 and timestamp - self.lastScrollTime > 1.5:

@@ -92,15 +92,18 @@ class GazeSubscriber:
         self.lastScrollTime = 0
 
         self.myColumns = ['TimeStamp', 'ScreenPartX', 'ScreenPartY', 'BallPosX', 'BallPosY',
-                          'GazeAngleX', 'GazeAngleY',
+                          'GazeAngleX', 'GazeAngleY', 'GazePointX', 'GazePointY',
+                          'Gaze0X', 'Gaze0Y', 'Gaze0Z', 'Gaze1X', 'Gaze1Y', 'Gaze1Z',
                           'EyeBall0X', 'EyeBall0Y', 'EyeBall0Z',
+                          'EyeBallCenter0X','EyeBallCenter0Y', 'EyeBallCenter0Z',
                           'EyeBall1X', 'EyeBall1Y', 'EyeBall1Z',
+                          'EyeBallCenter1X', 'EyeBallCenter1Y', 'EyeBallCenter1Z',
                           'Pupil0X', 'Pupil0Y', 'Pupil0Z',
                           'Pupil1X', 'Pupil1Y', 'Pupil1Z',
                           'HeadPosX', 'HeadPosY', 'HeadPosZ',
                           'HeadAngleX', 'HeadAngleY', 'HeadAngleZ']
         self.df = pd.DataFrame(columns=self.myColumns)
-        self.entry = dict(zip(self.myColumns, [np.nan] * 25))
+        self.entry = dict(zip(self.myColumns, [np.nan] * 33))
         self.dataPath = '.\\calibrateData\\'
         self.dataName = 'OpenFace' + strftime("%Y-%m-%d-%H-%M", gmtime()) + '.csv'
         self.running = True
@@ -137,12 +140,26 @@ class GazeSubscriber:
                 gaze = data['gaze']
                 gaze_angle_x = gaze['gaze_angle_x'] * 180 / 3.1415926
                 gaze_angle_y = gaze['gaze_angle_y'] * 180 / 3.1415926
+                gaze_point_x = gaze['gaze_screen_x']
+                gaze_point_y = gaze['gaze_screen_y']
+                gaze_0_x = gaze['gaze_0_x']
+                gaze_0_y = gaze['gaze_0_y']
+                gaze_0_z = gaze['gaze_0_z']
+                gaze_1_x = gaze['gaze_1_x']
+                gaze_1_y = gaze['gaze_1_y']
+                gaze_1_z = gaze['gaze_1_z']
                 eye_ball_0_x = gaze['eye_ball_0_x']
                 eye_ball_0_y = gaze['eye_ball_0_y']
                 eye_ball_0_z = gaze['eye_ball_0_z']
+                eye_ball_center_0_x = gaze['eye_ball_center_0_x']
+                eye_ball_center_0_y = gaze['eye_ball_center_0_y']
+                eye_ball_center_0_z = gaze['eye_ball_center_0_z']
                 eye_ball_1_x = gaze['eye_ball_1_x']
                 eye_ball_1_y = gaze['eye_ball_1_y']
                 eye_ball_1_z = gaze['eye_ball_1_z']
+                eye_ball_center_1_x = gaze['eye_ball_center_1_x']
+                eye_ball_center_1_y = gaze['eye_ball_center_1_y']
+                eye_ball_center_1_z = gaze['eye_ball_center_1_z']
                 pupil_0_x = gaze['pupil_0_x']
                 pupil_0_y = gaze['pupil_0_y']
                 pupil_0_z = gaze['pupil_0_z']
@@ -163,6 +180,14 @@ class GazeSubscriber:
                 self.entry['ScreenPartY'] = part_y
                 self.entry['GazeAngleX'] = gaze_angle_x
                 self.entry['GazeAngleY'] = gaze_angle_y
+                self.entry['GazePointX'] = gaze_point_x
+                self.entry['GazePointY'] = gaze_point_y
+                self.entry['Gaze0X'] = gaze_0_x
+                self.entry['Gaze0Y'] = gaze_0_y
+                self.entry['Gaze0Z'] = gaze_0_z
+                self.entry['Gaze1X'] = gaze_1_x
+                self.entry['Gaze1Y'] = gaze_1_y
+                self.entry['Gaze1Z'] = gaze_1_z
                 self.entry['HeadPosX'] = HeadPosX
                 self.entry['HeadPosY'] = HeadPosY
                 self.entry['HeadPosZ'] = HeadPosZ
@@ -172,9 +197,15 @@ class GazeSubscriber:
                 self.entry['EyeBall0X'] = eye_ball_0_x
                 self.entry['EyeBall0Y'] = eye_ball_0_y
                 self.entry['EyeBall0Z'] = eye_ball_0_z
+                self.entry['EyeBallCenter0X'] = eye_ball_center_0_x
+                self.entry['EyeBallCenter0Y'] = eye_ball_center_0_y
+                self.entry['EyeBallCenter0Z'] = eye_ball_center_0_z
                 self.entry['EyeBall1X'] = eye_ball_1_x
                 self.entry['EyeBall1Y'] = eye_ball_1_y
                 self.entry['EyeBall1Z'] = eye_ball_1_z
+                self.entry['EyeBallCenter1X'] = eye_ball_center_1_x
+                self.entry['EyeBallCenter1Y'] = eye_ball_center_1_y
+                self.entry['EyeBallCenter1Z'] = eye_ball_center_1_z
                 self.entry['Pupil0X'] = pupil_0_x
                 self.entry['Pupil0Y'] = pupil_0_y
                 self.entry['Pupil0Z'] = pupil_0_z
@@ -214,7 +245,7 @@ def calibrate():
     if class_regression:
         # Keep update
         i = 0
-        while i < 4000:
+        while i < 1000:
             ball.draw()
             if i % 100 == 0:
                 # ball.draw()
@@ -235,8 +266,8 @@ def calibrate():
     ball.gazeSubscriber.stop()
     tk.destroy()
 
-    eng = matlab.engine.start_matlab()
-    eng.CalibrateModelGPR(nargout=0)
+    # eng = matlab.engine.start_matlab()
+    # eng.CalibrateModelGPR(nargout=0)
 
 if __name__ == '__main__':
     calibrate()
