@@ -11,29 +11,29 @@ Pupil1 = [T.Pupil1X T.Pupil1Y T.Pupil1Z];
 rayDir1 = Pupil1 / norm(Pupil1);
 HeadPos = [T.HeadPosX T.HeadPosY T.HeadPosZ];
 HeadRot = [T.HeadAngleX T.HeadAngleY T.HeadAngleZ];
-HeadRot = HeadRot * 3.1415926/180;
 HeadRotMat = Euler2RotationMatrix(HeadRot);
 
-offset = [0 -2 4]';
+offset = [0 -3.5 6]';
 
 offset_mat = HeadRotMat * offset;
-offset_mat = offset_mat'
+offset_mat = offset_mat';
 
 EyeBallCenter0 = offset_mat + EyeBall0;
 EyeBallCenter1 = offset_mat + EyeBall1;
 
-gazeVecAxis0 = RaySphereIntersect([0 0 0], rayDir0, EyeBallCenter0, 12);
-gazeVecAxis1 = RaySphereIntersect([0 0 0], rayDir1, EyeBallCenter1, 12);
+gazeVecAxis0 = RaySphereIntersect([0 0 0], rayDir0, EyeBallCenter0, 12) - EyeBallCenter0;
+gazeVecAxis1 = RaySphereIntersect([0 0 0], rayDir1, EyeBallCenter1, 12) - EyeBallCenter1;
 gazeAbsolute0 = gazeVecAxis0 / norm(gazeVecAxis0);
 gazeAbsolute1 = gazeVecAxis1 / norm(gazeVecAxis1);
 
 EyeBallCenter0_re = [T.EyeBallCenter0X T.EyeBallCenter0Y T.EyeBallCenter0Z];
-EyeBallCenter0_re - EyeBall0
+offset_openface = EyeBallCenter0_re - EyeBall0 - offset_mat
 % EyeBallCenter1 = [T.EyeBallCenter1X T.EyeBallCenter1Y T.EyeBallCenter1Z];
 % gazeAbsolute0 = [T.Gaze0X T.Gaze0Y T.Gaze0Z];
 % gazeAbsolute1 = [T.Gaze1X T.Gaze1Y T.Gaze1Z];
 screenVector = [0 0 1];
+% a = sym('a')
 screenPoint = [0 0 0];
 gazePoint0 = PlaneLineIntersecPoint(screenVector, screenPoint, gazeAbsolute0, EyeBallCenter0);
 gazePoint1 = PlaneLineIntersecPoint(screenVector, screenPoint, gazeAbsolute1, EyeBallCenter1);
-gazePoint = (gazePoint0 + gazePoint1) / 2;
+gazePoint = (gazePoint0 + gazePoint1) / 2

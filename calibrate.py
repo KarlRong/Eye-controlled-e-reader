@@ -134,9 +134,9 @@ class GazeSubscriber:
                 HeadPosX = headPose['pose_Tx']
                 HeadPosY = headPose['pose_Ty']
                 HeadPosZ = headPose['pose_Tz']
-                HeadPosRx = headPose['pose_Rx'] * 180 / 3.1415926
-                HeadPosRy = headPose['pose_Ry'] * 180 / 3.1415926
-                HeadPosRz = headPose['pose_Rz'] * 180 / 3.1415926
+                HeadPosRx = headPose['pose_Rx']
+                HeadPosRy = headPose['pose_Ry']
+                HeadPosRz = headPose['pose_Rz']
                 gaze = data['gaze']
                 gaze_angle_x = gaze['gaze_angle_x'] * 180 / 3.1415926
                 gaze_angle_y = gaze['gaze_angle_y'] * 180 / 3.1415926
@@ -245,13 +245,15 @@ def calibrate():
     if class_regression:
         # Keep update
         i = 0
-        while i < 1000:
+        while i < 4000:
             ball.draw()
-            if i % 100 == 0:
-                # ball.draw()
-                # 快速刷新屏幕
-                tk.update_idletasks()
-                tk.update()
+            tk.update_idletasks()
+            tk.update()
+            # if i % 100 == 0:
+            #     # ball.draw()
+            #     # 快速刷新屏幕
+            #     tk.update_idletasks()
+            #     tk.update()
 
             time.sleep(0.01)
             i = i + 1
