@@ -1,6 +1,8 @@
-# Simple_EReader
+Eye Controlled E-Reader
 
-source code of a [tutorial](http://knarfeh.github.io/2016/02/29/用PyQt4+Python写一个简单的EPub阅读器(1:3))
+1. Refer to source code of https://github.com/knarfeh/Simple_EReader
+2. Migrate to python3.6 and pyqt5
+3. Combined with data from OpenFace to control the scroll with eye. https://github.com/KarlRong/OpenFace
 
 
 ## License

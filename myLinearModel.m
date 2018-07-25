@@ -2,7 +2,7 @@ dataDir = '.\calibrateData\';
 dataFileName = getlatestfile(dataDir);
 calibrateData = readtable([dataDir dataFileName]);
 
-T = calibrateData(1, :);
+T = calibrateData(175, :);
 EyeBall0 = [T.EyeBall0X T.EyeBall0Y T.EyeBall0Z];
 EyeBall1 = [T.EyeBall1X T.EyeBall1Y T.EyeBall1Z];
 Pupil0 = [T.Pupil0X T.Pupil0Y T.Pupil0Z];
@@ -13,7 +13,7 @@ HeadPos = [T.HeadPosX T.HeadPosY T.HeadPosZ];
 HeadRot = [T.HeadAngleX T.HeadAngleY T.HeadAngleZ];
 HeadRotMat = Euler2RotationMatrix(HeadRot);
 
-offset = [0 -3.5 6]';
+offset = [0 -3.5 1]';
 
 offset_mat = HeadRotMat * offset;
 offset_mat = offset_mat';

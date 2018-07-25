@@ -39,6 +39,20 @@ class Ball:
         self.queue = queue.Queue()
         self.gazeSubscriber = GazeSubscriber(self.queue)
 
+        self.count_calibrate = 1
+
+    def draw_calibrate(self, index):
+        self.canvas.delete(self.id)
+        self.id = self.canvas.create_oval(10, 10, 25, 25, fill=self.color)
+        x_ball = [100, 1436, 1436, 100]
+        y_ball = [100, 100, 764, 764]
+        self.canvas.move(self.id, x_ball[index], y_ball[index])
+        print('Classification: ' + str(x_ball) + ' ' + str(y_ball))
+
+        self.posBall = [x_ball[index], y_ball[index]]
+        msg = self.posBall
+        self.queue.put(msg)
+
     def draw_class(self):
         self.canvas.delete(self.id)
         self.id = self.canvas.create_oval(10, 10, 25, 25, fill=self.color)
@@ -241,11 +255,11 @@ def calibrate():
     tk.update()
     # Create ball
     ball = Ball(canvas, 'red')
-    class_regression = True
-    if class_regression:
+    class_regression = 3
+    if class_regression == 1:
         # Keep update
         i = 0
-        while i < 4000:
+        while i < 2000:
             ball.draw()
             tk.update_idletasks()
             tk.update()
@@ -257,19 +271,29 @@ def calibrate():
 
             time.sleep(0.01)
             i = i + 1
-    else:
+    elif class_regression == 2:
         i = 0
-        while i < 4:
+        while i < 400:
             ball.draw_class()
             tk.update_idletasks()
             tk.update()
             time.sleep(1)
             i = i + 1
+    elif class_regression == 3:
+        i = 0
+        count = 1200
+        while i < count:
+            ball.draw_calibrate(math.floor(i / 300))
+            tk.update_idletasks()
+            tk.update()
+            time.sleep(0.01)
+            i = i + 1
     ball.gazeSubscriber.stop()
     tk.destroy()
 
-    # eng = matlab.engine.start_matlab()
-    # eng.CalibrateModelGPR(nargout=0)
+    eng = matlab.engine.start_matlab()
+    eng.GetTForm(nargout=0)
+
 
 if __name__ == '__main__':
     calibrate()
