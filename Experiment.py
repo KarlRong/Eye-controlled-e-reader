@@ -14,6 +14,8 @@ import pandas as pd
 import numpy as np
 import math
 import matlab.engine
+from calibrate import Calibrate
+
 
 class Ball:
     def __init__(self, canvas, color, eng):
@@ -168,36 +170,39 @@ class GazeSubscriber:
                     pass
             time.sleep(0.001)
 
-
-def experiment():
-    # Create Canvas
-    eng = matlab.engine.start_matlab()
-    tk = Tk()
-    tk.title("Calibrate")
-    tk.resizable(0, 0)
-    tk.wm_attributes("-topmost", 1, "-fullscreen", 1)
-    # bd=0,highlightthickness=0 No border around canvas
-    canvas = Canvas(tk, width=1920, height=1080, bd=0, highlightthickness=0)
-    canvas.pack()
-    tk.update()
-    # Create ball
-    ball = Ball(canvas, 'red', eng)
-
-    i = 0
-    count = 1000
-    while i < count:
-        ball.draw_experiment(math.floor(i / 200))
-        tk.update_idletasks()
+class Experiment:
+    def experiment(eng):
+        # Create Canvas
+        tk = Tk()
+        tk.title("Calibrate")
+        tk.resizable(0, 0)
+        tk.wm_attributes("-topmost", 1, "-fullscreen", 1)
+        # bd=0,highlightthickness=0 No border around canvas
+        canvas = Canvas(tk, width=1920, height=1080, bd=0, highlightthickness=0)
+        canvas.pack()
         tk.update()
-        time.sleep(0.01)
-        i = i + 1
+        # Create ball
+        ball = Ball(canvas, 'red', eng)
 
-    ball.gazeSubscriber.stop()
-    tk.destroy()
+        i = 0
+        count = 1000
+        while i < count:
+            ball.draw_experiment(math.floor(i / 200))
+            tk.update_idletasks()
+            tk.update()
+            time.sleep(0.01)
+            i = i + 1
 
-    # eng = matlab.engine.start_matlab()
-    # eng.GetTForm(nargout=0)
+        ball.gazeSubscriber.stop()
+        tk.destroy()
+
+        # eng.GetTForm(nargout=0)
 
 
 if __name__ == '__main__':
-    experiment()
+    print("Start MatLab Engine:\n ")
+    eng = matlab.engine.start_matlab()
+    print("Start Calibrate:\n ")
+    Calibrate.calibrate(eng)
+    print("Start experiment:\n")
+    Experiment.experiment(eng)

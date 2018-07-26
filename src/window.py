@@ -111,6 +111,6 @@ class MainWindow(QMainWindow):
     def receive_gaze(self, text, bScroll):
         print("receive: " + str(bScroll))
         if bScroll:
-            self.book.webPage.runJavaScript(str("window.scrollBy({0}, {1});".format('0', '425')))
+            self.book.webPage.runJavaScript(str("window.scrollBy({0}, {1});".format('0', '400')))
         else:
-            self.book.webPage.runJavaScript(str("window.scrollTo({0}, {1});".format('0', '-425')))
+            self.book.webPage.runJavaScript(str("window.scrollTo({0}, {1});".format('0', '-400')))

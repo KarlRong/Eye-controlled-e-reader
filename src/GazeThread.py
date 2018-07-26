@@ -92,7 +92,7 @@ class GazeThread(QtCore.QThread):
             #     self.signal_timeStamp.emit("GazeTimestamp:", False)  # 发送信号
             #     self.lastScrollTime = timestamp
 
-            if gazeCoordinates[1] > 750 and gazeCoordinates[0] > 300 and gazeCoordinates[1] < 1000 and timestamp - self.lastScrollTime > 1.5:
+            if gazeCoordinates[1] > 700 and gazeCoordinates[0] > 300 and gazeCoordinates[1] < 1000 and timestamp - self.lastScrollTime > 1.5:
                 self.count_trigged = self.count_trigged + 1
                 if self.count_trigged > 10:
                     self.signal_timeStamp.emit("GazeTimestamp:", True)  # 发送信号

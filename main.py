@@ -9,8 +9,9 @@ reload(sys)
 
 
 def main():
-    print("Start Calibrate:\n ")
+    print("Start MatLabEngine:\n ")
     eng = matlab.engine.start_matlab()
+    print("Start Calibrate:\n ")
     Calibrate.calibrate(eng)
     print("Start e-book reader:\n ")
     app = QApplication(sys.argv)
