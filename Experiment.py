@@ -196,7 +196,8 @@ class Experiment:
         ball.gazeSubscriber.stop()
         tk.destroy()
 
-        # eng.GetTForm(nargout=0)
+        mean_error = eng.ExperimentData()
+        print('Mean Error: ' + str(mean_error) + 'px')
 
 
 if __name__ == '__main__':
