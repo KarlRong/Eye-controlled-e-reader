@@ -242,58 +242,58 @@ class GazeSubscriber:
                     pass
             time.sleep(0.001)
 
+class Calibrate:
+    def calibrate(eng):
+        # Create Canvas
+        tk = Tk()
+        tk.title("Calibrate")
+        tk.resizable(0, 0)
+        tk.wm_attributes("-topmost", 1, "-fullscreen", 1)
+        # bd=0,highlightthickness=0 No border around canvas
+        canvas = Canvas(tk, width=1920, height=1080, bd=0, highlightthickness=0)
+        canvas.pack()
+        tk.update()
+        # Create ball
+        ball = Ball(canvas, 'red')
+        class_regression = 3
+        if class_regression == 1:
+            # Keep update
+            i = 0
+            while i < 2000:
+                ball.draw()
+                tk.update_idletasks()
+                tk.update()
+                # if i % 100 == 0:
+                #     # ball.draw()
+                #     # 快速刷新屏幕
+                #     tk.update_idletasks()
+                #     tk.update()
 
-def calibrate():
-    # Create Canvas
-    tk = Tk()
-    tk.title("Calibrate")
-    tk.resizable(0, 0)
-    tk.wm_attributes("-topmost", 1, "-fullscreen", 1)
-    # bd=0,highlightthickness=0 No border around canvas
-    canvas = Canvas(tk, width=1920, height=1080, bd=0, highlightthickness=0)
-    canvas.pack()
-    tk.update()
-    # Create ball
-    ball = Ball(canvas, 'red')
-    class_regression = 3
-    if class_regression == 1:
-        # Keep update
-        i = 0
-        while i < 2000:
-            ball.draw()
-            tk.update_idletasks()
-            tk.update()
-            # if i % 100 == 0:
-            #     # ball.draw()
-            #     # 快速刷新屏幕
-            #     tk.update_idletasks()
-            #     tk.update()
+                time.sleep(0.01)
+                i = i + 1
+        elif class_regression == 2:
+            i = 0
+            while i < 400:
+                ball.draw_class()
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(1)
+                i = i + 1
+        elif class_regression == 3:
+            i = 0
+            count = 1200
+            while i < count:
+                ball.draw_calibrate(math.floor(i / 300))
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(0.01)
+                i = i + 1
+        ball.gazeSubscriber.stop()
+        tk.destroy()
 
-            time.sleep(0.01)
-            i = i + 1
-    elif class_regression == 2:
-        i = 0
-        while i < 400:
-            ball.draw_class()
-            tk.update_idletasks()
-            tk.update()
-            time.sleep(1)
-            i = i + 1
-    elif class_regression == 3:
-        i = 0
-        count = 1200
-        while i < count:
-            ball.draw_calibrate(math.floor(i / 300))
-            tk.update_idletasks()
-            tk.update()
-            time.sleep(0.01)
-            i = i + 1
-    ball.gazeSubscriber.stop()
-    tk.destroy()
-
-    eng = matlab.engine.start_matlab()
-    eng.GetTForm(nargout=0)
+        eng.GetTForm(nargout=0)
 
 
 if __name__ == '__main__':
-    calibrate()
+    eng = matlab.engine.start_matlab()
+    Calibrate.calibrate(eng)

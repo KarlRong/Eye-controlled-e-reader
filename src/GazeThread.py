@@ -12,7 +12,7 @@ import matlab.engine
 class GazeThread(QtCore.QThread):
     signal_timeStamp = QtCore.pyqtSignal(str, bool)  # 信号
 
-    def __init__(self, parent=None):
+    def __init__(self, eng, parent=None):
         super(GazeThread, self).__init__(parent)
 
         port = "5570"
@@ -27,7 +27,8 @@ class GazeThread(QtCore.QThread):
 
         self.lastScrollTime = 0
         print("Starting matlab engine...")
-        self.eng = matlab.engine.start_matlab()
+        # self.eng = matlab.engine.start_matlab()
+        self.eng = eng
         print("Collecting head pose updates...")
 
         self.count_trigged = 0

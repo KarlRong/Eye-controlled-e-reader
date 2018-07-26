@@ -29,10 +29,10 @@ from constants import LIBRARY_DIR
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, eng):
         super(MainWindow, self).__init__()
 
-        self.gazeThread = GazeThread()
+        self.gazeThread = GazeThread(eng)
 
         self.create_layout()
         self.create_actions()

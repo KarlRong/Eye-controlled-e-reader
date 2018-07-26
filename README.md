@@ -9,9 +9,8 @@ User Instruction
 1. Open with PyCharm and set Project Interpreter to Virtualenv Enviroment in ./venv/
 2. Run 'OpenFaceOffline.exe' in https://github.com/KarlRong/OpenFace
 3. Keep head fixed in use. This restrication will be removed in the future
-4. Run script 'calibrate'
-5. Run script 'main'
-6. Now when you gaze at botoom of the page, it will scroll to next
+4. Run script 'main'. It will first have a calibration phase. Gaze at the red ball shown on the screen and keep head fixed
+5. Now when you gaze at botoom of the page, it will scroll to next
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
