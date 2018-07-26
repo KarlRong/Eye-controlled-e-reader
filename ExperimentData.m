@@ -29,6 +29,6 @@ function mean_error = ExperimentData()
     grid on
     axis equal
     
-    saveas(fig, ".\experimentFigure\" + dataFileName(1:(end-4)) + ".png")
+    saveas(fig, ".\experimentFigure\" + mean_error + " px " + dataFileName(1:(end-4)) + ".png")
     pause(5);
 end
